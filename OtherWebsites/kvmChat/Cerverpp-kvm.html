@@ -1,0 +1,1686 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Cerver++ - kvm</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+
+    <style>
+        /* General */
+
+@font-face {
+    font-family: Whitney;
+    src: url(https://discordapp.com/assets/6c6374bad0b0b6d204d8d6dc4a18d820.woff);
+    font-weight: 300;
+}
+
+@font-face {
+    font-family: Whitney;
+    src: url(https://discordapp.com/assets/e8acd7d9bf6207f99350ca9f9e23b168.woff);
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: Whitney;
+    src: url(https://discordapp.com/assets/3bdef1251a424500c1b3a78dea9b7e57.woff);
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: Whitney;
+    src: url(https://discordapp.com/assets/be0060dafb7a0e31d2a1ca17c0708636.woff);
+    font-weight: 600;
+}
+
+@font-face {
+    font-family: Whitney;
+    src: url(https://discordapp.com/assets/8e12fb4f14d9c4592eb8ec9f22337b04.woff);
+    font-weight: 700;
+}
+
+body {
+    font-family: "Whitney", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 17px;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+img {
+    object-fit: contain;
+}
+
+.markdown {
+    white-space: pre-wrap;
+    line-height: 1.3;
+    overflow-wrap: break-word;
+}
+
+.spoiler {
+    border-radius: 3px;
+}
+
+.quote {
+    margin: 0.5em 0;
+    padding-left: 0.6em;
+    border-left: 4px solid;
+    border-radius: 3px;
+}
+
+.pre {
+    font-family: "Consolas", "Courier New", Courier, monospace;
+}
+
+.pre--multiline {
+    margin-top: 0.25em;
+    padding: 0.5em;
+    border: 2px solid;
+    border-radius: 5px;
+}
+
+.pre--inline {
+    padding: 2px;
+    border-radius: 3px;
+    font-size: 0.85em;
+}
+
+.mention {
+    font-weight: 500;
+}
+
+.emoji {
+    width: 1.25em;
+    height: 1.25em;
+    margin: 0 0.06em;
+    vertical-align: -0.4em;
+}
+
+.emoji--small {
+    width: 1em;
+    height: 1em;
+}
+
+.emoji--large {
+    width: 2.8em;
+    height: 2.8em;
+}
+
+/* Preamble */
+
+.preamble {
+    display: grid;
+    margin: 0 0.3em 0.6em 0.3em;
+    max-width: 100%;
+    grid-template-columns: auto 1fr;
+}
+
+.preamble__guild-icon-container {
+    grid-column: 1;
+}
+
+.preamble__guild-icon {
+    max-width: 88px;
+    max-height: 88px;
+}
+
+.preamble__entries-container {
+    grid-column: 2;
+    margin-left: 0.6em;
+}
+
+.preamble__entry {
+    font-size: 1.4em;
+}
+
+.preamble__entry--small {
+    font-size: 1em;
+}
+
+/* Chatlog */
+
+.chatlog {
+    max-width: 100%;
+}
+
+.chatlog__message-group {
+    display: grid;
+    margin: 0 0.6em;
+    padding: 0.9em 0;
+    border-top: 1px solid;
+    grid-template-columns: auto 1fr;
+}
+
+.chatlog__author-avatar-container {
+    grid-column: 1;
+    width: 40px;
+    height: 40px;
+}
+
+.chatlog__author-avatar {
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+}
+
+.chatlog__messages {
+    grid-column: 2;
+    margin-left: 1.2em;
+    min-width: 50%;
+}
+
+.chatlog__author-name {
+    font-weight: 500;
+}
+
+.chatlog__timestamp {
+    margin-left: 0.3em;
+    font-size: 0.75em;
+}
+
+.chatlog__message {
+    padding: 0.1em 0.3em;
+    margin: 0 -0.3em;
+    background-color: transparent;
+    transition: background-color 1s ease;
+}
+
+.chatlog__content {
+    font-size: 0.95em;
+    word-wrap: break-word;
+}
+
+.chatlog__edited-timestamp {
+    margin-left: 0.15em;
+    font-size: 0.8em;
+}
+
+.chatlog__attachment-thumbnail {
+    margin-top: 0.3em;
+    max-width: 50%;
+    max-height: 500px;
+    border-radius: 3px;
+}
+
+.chatlog__embed {
+    display: flex;
+    margin-top: 0.3em;
+    max-width: 520px;
+}
+
+.chatlog__embed-color-pill {
+    flex-shrink: 0;
+    width: 0.25em;
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+
+.chatlog__embed-content-container {
+    display: flex;
+    flex-direction: column;
+    padding: 0.5em 0.6em;
+    border: 1px solid;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+.chatlog__embed-content {
+    display: flex;
+    width: 100%;
+}
+
+.chatlog__embed-text {
+    flex: 1;
+}
+
+.chatlog__embed-author {
+    display: flex;
+    margin-bottom: 0.3em;
+    align-items: center;
+}
+
+.chatlog__embed-author-icon {
+    margin-right: 0.5em;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+}
+
+.chatlog__embed-author-name {
+    font-size: 0.875em;
+    font-weight: 600;
+}
+
+.chatlog__embed-title {
+    margin-bottom: 0.2em;
+    font-size: 0.875em;
+    font-weight: 600;
+}
+
+.chatlog__embed-description {
+    font-weight: 500;
+    font-size: 0.85em;
+}
+
+.chatlog__embed-fields {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.chatlog__embed-field {
+    flex: 0;
+    min-width: 100%;
+    max-width: 506px;
+    padding-top: 0.6em;
+    font-size: 0.875em;
+}
+
+.chatlog__embed-field--inline {
+    flex: 1;
+    flex-basis: auto;
+    min-width: 150px;
+}
+
+.chatlog__embed-field-name {
+    margin-bottom: 0.2em;
+    font-weight: 600;
+}
+
+.chatlog__embed-field-value {
+    font-weight: 500;
+}
+
+.chatlog__embed-thumbnail {
+    flex: 0;
+    margin-left: 1.2em;
+    max-width: 80px;
+    max-height: 80px;
+    border-radius: 3px;
+}
+
+.chatlog__embed-image-container {
+    margin-top: 0.6em;
+}
+
+.chatlog__embed-image {
+    max-width: 500px;
+    max-height: 400px;
+    border-radius: 3px;
+}
+
+.chatlog__embed-footer {
+    margin-top: 0.6em;
+}
+
+.chatlog__embed-footer-icon {
+    margin-right: 0.2em;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    vertical-align: middle;
+}
+
+.chatlog__embed-footer-text {
+    font-size: 0.75em;
+    font-weight: 500;
+}
+
+.chatlog__reactions {
+    display: flex;
+}
+
+.chatlog__reaction {
+    display: flex;
+    align-items: center;
+    margin: 0.35em 0.1em 0.1em 0.1em;
+    padding: 0.2em 0.35em;
+    border-radius: 3px;
+}
+
+.chatlog__reaction-count {
+    min-width: 9px;
+    margin-left: 0.35em;
+    font-size: 0.875em;
+}
+
+.chatlog__bot-tag {
+    position: relative;
+    top: -.2em;
+    margin-left: 0.3em;
+    padding: 0.05em 0.3em;
+    border-radius: 3px;
+    vertical-align: middle;
+    line-height: 1.3;
+    background: #7289da;
+    color: #ffffff;
+    font-size: 0.625em;
+    font-weight: 500;
+}
+
+/* Postamble */
+
+.postamble {
+    margin: 1.4em 0.3em 0.6em 0.3em;
+    padding: 1em;
+    border-top: 1px solid;
+}
+    </style>
+    <style>
+        /* General */
+
+body {
+    background-color: #36393e;
+    color: #dcddde;
+}
+
+a {
+    color: #0096cf;
+}
+
+.spoiler {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.quote {
+    border-color: #4f545c;
+}
+
+.pre {
+    background-color: #2f3136 !important;
+}
+
+.pre--multiline {
+    border-color: #282b30 !important;
+    color: #b9bbbe !important;
+}
+
+.mention {
+    color: #7289da;
+}
+
+/* === Preamble === */
+
+.preamble__entry {
+    color: #ffffff;
+}
+
+/* Chatlog */
+
+.chatlog__message-group {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.chatlog__author-name {
+    color: #ffffff;
+}
+
+.chatlog__timestamp {
+    color: rgba(255, 255, 255, 0.2);
+}
+
+.chatlog__message--highlighted {
+    background-color: rgba(114, 137, 218, 0.2) !important;
+}
+
+.chatlog__message--pinned {
+    background-color: rgba(249, 168, 37, 0.05);
+}
+
+.chatlog__edited-timestamp {
+    color: rgba(255, 255, 255, 0.2);
+}
+
+.chatlog__embed-color-pill--default {
+    background-color: rgba(79, 84, 92, 1);
+}
+
+.chatlog__embed-content-container {
+    background-color: rgba(46, 48, 54, 0.3);
+    border-color: rgba(46, 48, 54, 0.6);
+}
+
+.chatlog__embed-author-name {
+    color: #ffffff;
+}
+
+.chatlog__embed-author-name-link {
+    color: #ffffff;
+}
+
+.chatlog__embed-title {
+    color: #ffffff;
+}
+
+.chatlog__embed-description {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.chatlog__embed-field-name {
+    color: #ffffff;
+}
+
+.chatlog__embed-field-value {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.chatlog__embed-footer {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.chatlog__reaction {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.chatlog__reaction-count {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+/* Postamble */
+
+.postamble {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.postamble__entry {
+    color: #ffffff;
+}
+    </style>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/solarized-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.pre--multiline').forEach(block => hljs.highlightBlock(block));
+        });
+    </script>
+
+    <script>
+        function scrollToMessage(event, id) {
+            var element = document.getElementById('message-' + id);
+
+            if (element) {
+                event.preventDefault();
+
+                element.classList.add('chatlog__message--highlighted');
+
+                window.scrollTo({
+                    top: element.getBoundingClientRect().top - document.body.getBoundingClientRect().top - (window.innerHeight / 2),
+                    behavior: 'smooth'
+                });
+
+                window.setTimeout(function() {
+                    element.classList.remove('chatlog__message--highlighted');
+                }, 2000);
+            }
+        }
+    </script>
+</head>
+<body>
+
+<div class="preamble">
+    <div class="preamble__guild-icon-container">
+        <img class="preamble__guild-icon" src="https://cdn.discordapp.com/embed/avatars/0.png" alt="Guild icon" />
+    </div>
+    <div class="preamble__entries-container">
+        <div class="preamble__entry">Cerver++</div>
+        <div class="preamble__entry">kvm</div>
+
+
+    </div>
+</div>
+
+<div class="chatlog">
+    <div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/344579102419845120/f0874780775b3e1c0d42a3495d0d5d84.png" alt="Avatar" />
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="OnikenX#0536" data-user-id="344579102419845120">OnikenX</span>
+
+
+        <span class="chatlog__timestamp">01-Oct-19 11:38 AM</span>
+
+            <div class="chatlog__message " data-message-id="628541207156621322" id="message-628541207156621322">
+                <div class="chatlog__content">
+                    <span class="markdown"><span class="mention" title="Samega 7Cattac#5961">@Samega 7Cattac</span> aparentemente virt manager nao tem apis para samba</span>
+
+                </div>
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="628541274626195459" id="message-628541274626195459">
+                <div class="chatlog__content">
+                    <span class="markdown">mas podes fazer isto <a href="https://unix.stackexchange.com/questions/188301/how-to-set-up-samba-sharing-with-libvirtd">https://unix.stackexchange.com/questions/188301/how-to-set-up-samba-sharing-with-libvirtd</a></span>
+
+                </div>
+
+
+            <div class="chatlog__embed">
+                <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+                <div class="chatlog__embed-content-container">
+                    <div class="chatlog__embed-content">
+                        <div class="chatlog__embed-text">
+
+                            <div class="chatlog__embed-title">
+                                <a class="chatlog__embed-title-link" href="https://unix.stackexchange.com/questions/188301/how-to-set-up-samba-sharing-with-libvirtd"><span class="markdown">How to set up samba sharing with libvirtd</span></a>
+                            </div>
+
+                            <div class="chatlog__embed-description"><span class="markdown">I&#39;m using QEmu with a Windows 7 guest on my (Arch) Linux system. I&#39;d like to use the samba to share a directory on my host system with the Windows guest. I can do this from the terminal with a comm...</span></div>
+
+                        </div>
+
+                        <div class="chatlog__embed-thumbnail-container">
+                            <a class="chatlog__embed-thumbnail-link" href="https://cdn.sstatic.net/Sites/unix/img/apple-touch-icon@2.png?v=32fb07f7ce26">
+                                <img class="chatlog__embed-thumbnail" src="https://cdn.sstatic.net/Sites/unix/img/apple-touch-icon@2.png?v=32fb07f7ce26" alt="Thumbnail" />
+                            </a>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+            </div>
+            <div class="chatlog__message " data-message-id="628541335242145813" id="message-628541335242145813">
+                <div class="chatlog__content">
+                    <span class="markdown">agora eu tentei isto mas nao me parece que esta a funcar</span>
+
+                </div>
+
+
+
+            </div>
+    </div>
+</div><div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/344579102419845120/f0874780775b3e1c0d42a3495d0d5d84.png" alt="Avatar" />
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="OnikenX#0536" data-user-id="344579102419845120">OnikenX</span>
+
+
+        <span class="chatlog__timestamp">03-Oct-19 03:13 AM</span>
+
+            <div class="chatlog__message " data-message-id="629138813129588746" id="message-629138813129588746">
+                <div class="chatlog__content">
+                    <span class="markdown">ok, eu nao consigo dormir entao vou come&#231;ar a documentar a minha experiencia com kvm+qemu+libvirt e com isto demostrar como &#233; inutil fazer dual boot quando se tem uma vm bem setada com kvm em linux</span>
+
+                </div>
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="629139119867428865" id="message-629139119867428865">
+                <div class="chatlog__content">
+                    <span class="markdown">ja venho a querer fazer isto &#224; um ano desde que come&#231;ei a ouvir falar destas tecnolgias mas s&#243; agora, com ajuda do samega come&#231;ei a explorar isto e com o stor de IRC sendo um pouco conas vou ter de acelarar este projeto</span>
+
+                </div>
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="629139490069282861" id="message-629139490069282861">
+                <div class="chatlog__content">
+                    <span class="markdown">ok primeiro de tudo instalar as tools necessarias e fazer o setup</span>
+
+                </div>
+
+
+
+            </div>
+    </div>
+</div><div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/172002275412279296/f5f65755f67ae1dc88d9bb271d0f5bef.png" alt="Avatar" />
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Tatsu#8792" data-user-id="172002275412279296">Tatsu</span>
+
+            <span class="chatlog__bot-tag">BOT</span>
+
+        <span class="chatlog__timestamp">03-Oct-19 03:15 AM</span>
+
+            <div class="chatlog__message " data-message-id="629139490941829122" id="message-629139490941829122">
+                <div class="chatlog__content">
+                    <span class="markdown"><img class="emoji " alt="🆙" title="🆙" src="https://twemoji.maxcdn.com/2/72x72/1f199.png" />  |  <strong>OnikenX leveled up!</strong></span>
+
+                </div>
+
+                <div class="chatlog__attachment">
+                    <a href="https://cdn.discordapp.com/attachments/628541096582184960/629139490941829121/levelUp.png">
+                        
+                            <img class="chatlog__attachment-thumbnail" src="https://cdn.discordapp.com/attachments/628541096582184960/629139490941829121/levelUp.png" alt="Attachment" />
+                    </a>
+                </div>
+
+
+            </div>
+    </div>
+</div><div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/344579102419845120/f0874780775b3e1c0d42a3495d0d5d84.png" alt="Avatar" />
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="OnikenX#0536" data-user-id="344579102419845120">OnikenX</span>
+
+
+        <span class="chatlog__timestamp">03-Oct-19 03:18 AM</span>
+
+            <div class="chatlog__message " data-message-id="629140085287157832" id="message-629140085287157832">
+                <div class="chatlog__content">
+                    <span class="markdown">pina, gat, jota, rayoky e prates como usam um OS basiado em ubuntu sigam este guia <a href="https://vitux.com/how-to-install-kvm-to-create-and-manage-virtual-machines-in-ubuntu/">https://vitux.com/how-to-install-kvm-to-create-and-manage-virtual-machines-in-ubuntu/</a></span>
+
+                </div>
+
+
+            <div class="chatlog__embed">
+                <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+                <div class="chatlog__embed-content-container">
+                    <div class="chatlog__embed-content">
+                        <div class="chatlog__embed-text">
+                            <div class="chatlog__embed-author">
+
+                                <span class="chatlog__embed-author-name">
+                                    <a class="chatlog__embed-author-name-link" href="https://vitux.com/author/karim/">Karim Buzdar</a>
+                                </span>
+                            </div>
+
+                            <div class="chatlog__embed-title">
+                                <a class="chatlog__embed-title-link" href="https://vitux.com/how-to-install-kvm-to-create-and-manage-virtual-machines-in-ubuntu/"><span class="markdown">How to Install KVM and Manage Virtual Machines in Ubuntu 18.04</span></a>
+                            </div>
+
+                            <div class="chatlog__embed-description"><span class="markdown">What is KVM? KVM or Kernel-Based Virtual Machine provides a virtual environment used for running one or more additional operating systems besides the primary system without interfering with its functions. In KVM, the Linux Kernel makes use of the virtualization</span></div>
+
+                        </div>
+
+                        <div class="chatlog__embed-thumbnail-container">
+                            <a class="chatlog__embed-thumbnail-link" href="https://vitux.com/wp-content/uploads/2018/08/ubuntu-virtual-machine-manager.png">
+                                <img class="chatlog__embed-thumbnail" src="https://vitux.com/wp-content/uploads/2018/08/ubuntu-virtual-machine-manager.png" alt="Thumbnail" />
+                            </a>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+            </div>
+            <div class="chatlog__message " data-message-id="629141488487366657" id="message-629141488487366657">
+                <div class="chatlog__content">
+                    <span class="markdown">para o resto que usa arch <a href="https://wiki.archlinux.org/index.php/Libvirt">https://wiki.archlinux.org/index.php/Libvirt</a></span>
+
+                </div>
+
+
+            <div class="chatlog__embed">
+                <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+                <div class="chatlog__embed-content-container">
+                    <div class="chatlog__embed-content">
+                        <div class="chatlog__embed-text">
+
+                            <div class="chatlog__embed-title">
+                                <a class="chatlog__embed-title-link" href="https://wiki.archlinux.org/index.php/Libvirt"><span class="markdown">Libvirt</span></a>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+            </div>
+
+            </div>
+            <div class="chatlog__message " data-message-id="629141758441291787" id="message-629141758441291787">
+                <div class="chatlog__content">
+                    <span class="markdown">depois de instalar os packages base o resto da configura&#231;&#245;es v&#227;o ser independentes da distro</span>
+
+                </div>
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="629142396575154213" id="message-629142396575154213">
+                <div class="chatlog__content">
+                    <span class="markdown">depois de terem instalado o virt-manager para o gui faz a instala&#231;&#227;o normal de uma vm para windows depois de o windows estar instalado vamos instalar os drivers de virtio pelo iso</span>
+
+                </div>
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="629142976014319627" id="message-629142976014319627">
+                <div class="chatlog__content">
+                    <span class="markdown">o iso dos drivers podem ser encontrados aqui <a href="https://launchpad.net/kvm-guest-drivers-windows/+download">https://launchpad.net/kvm-guest-drivers-windows/+download</a> mountem o iso e vao ao device manager</span>
+
+                </div>
+
+
+
+            </div>
+    </div>
+</div><div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/344579102419845120/f0874780775b3e1c0d42a3495d0d5d84.png" alt="Avatar" />
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="OnikenX#0536" data-user-id="344579102419845120">OnikenX</span>
+
+
+        <span class="chatlog__timestamp">03-Oct-19 04:55 AM</span>
+
+            <div class="chatlog__message " data-message-id="629164621894254603" id="message-629164621894254603">
+                <div class="chatlog__content">
+                    <span class="markdown">E digam ao windows para procurar os drivers dos dispositivos sem drivers e ao de display ao iso</span>
+
+                </div>
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="629165350327418880" id="message-629165350327418880">
+                <div class="chatlog__content">
+                    <span class="markdown">O windows finciona com 2gb de ram mas aconsenho darem lhe 3</span>
+
+                </div>
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="629165705958391818" id="message-629165705958391818">
+                <div class="chatlog__content">
+                    <span class="markdown">o cpu deve ter a configuracao mais perto possivel do hardware do host para melhor speed</span>
+
+                </div>
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="629165862032769024" id="message-629165862032769024">
+                <div class="chatlog__content">
+                    <span class="markdown">vgpus e partilha direta &#233; algo que ainda estou a investigar</span>
+
+                </div>
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="629166047496503307" id="message-629166047496503307">
+                <div class="chatlog__content">
+                    <span class="markdown">Mas com isso nao devem ter problema algum a utilizar o visual studio</span>
+
+                </div>
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="629166225066295297" id="message-629166225066295297">
+                <div class="chatlog__content">
+                    <span class="markdown">Tambem estou a investigar sobre o codigo de IRC e ver se consigo tornar lhe nativo de uma forma facil</span>
+
+                </div>
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="629166332843261953" id="message-629166332843261953">
+                <div class="chatlog__content">
+                    <span class="markdown">Mas por enquanto isto resolve o problema</span>
+
+                </div>
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="629166466801074189" id="message-629166466801074189">
+                <div class="chatlog__content">
+                    <span class="markdown">Sem ter a necessidade de ter dualboot</span>
+
+                </div>
+
+
+
+            </div>
+    </div>
+</div><div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/344579102419845120/f0874780775b3e1c0d42a3495d0d5d84.png" alt="Avatar" />
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="OnikenX#0536" data-user-id="344579102419845120">OnikenX</span>
+
+
+        <span class="chatlog__timestamp">03-Oct-19 06:04 AM</span>
+
+            <div class="chatlog__message " data-message-id="629181853949100052" id="message-629181853949100052">
+                <div class="chatlog__content">
+                    <span class="markdown">tip: em kvm a vm so vai utilizar a ram que o OS guest estiver a usar, entao mesmo que tenham lhe dado 8gb e ele estiver a usar gastar 1gb a vm so vai alocar 1gb na memoria do host</span>
+
+                </div>
+
+
+
+            </div>
+    </div>
+</div><div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/344579102419845120/f0874780775b3e1c0d42a3495d0d5d84.png" alt="Avatar" />
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="OnikenX#0536" data-user-id="344579102419845120">OnikenX</span>
+
+
+        <span class="chatlog__timestamp">03-Oct-19 12:46 PM</span>
+
+            <div class="chatlog__message " data-message-id="629283078883508234" id="message-629283078883508234">
+                <div class="chatlog__content">
+                    <span class="markdown">para partilha de clipboard e arrastar ficheiros na vm instalem isto na vossa vm do windows <a href="https://www.spice-space.org/download/windows/spice-guest-tools/spice-guest-tools-latest.exe">https://www.spice-space.org/download/windows/spice-guest-tools/spice-guest-tools-latest.exe</a></span>
+
+                </div>
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="629283148001181696" id="message-629283148001181696">
+                <div class="chatlog__content">
+                    <span class="markdown">serch terms: <span class="pre pre--inline">spice-guest-tools-latest.exe download</span></span>
+
+                        <span class="chatlog__edited-timestamp" title="03-Oct-19 12:46 PM">(edited)</span>
+                </div>
+
+
+
+            </div>
+    </div>
+</div><div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/344579102419845120/f0874780775b3e1c0d42a3495d0d5d84.png" alt="Avatar" />
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="OnikenX#0536" data-user-id="344579102419845120">OnikenX</span>
+
+
+        <span class="chatlog__timestamp">03-Oct-19 01:25 PM</span>
+
+            <div class="chatlog__message " data-message-id="629292899439476746" id="message-629292899439476746">
+                <div class="chatlog__content">
+                    <span class="markdown"><span class="mention" title="Prates#1384">@Prates</span> <span class="mention" title="Alesh#6495">@Alesh</span> eu queria fazer isto melhor ao longo do semestre mas irc obrigou nos a acelarar este projecto de virtualizacao de alta performance para o windows</span>
+
+                </div>
+
+
+
+            </div>
+    </div>
+</div><div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/344579102419845120/f0874780775b3e1c0d42a3495d0d5d84.png" alt="Avatar" />
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="OnikenX#0536" data-user-id="344579102419845120">OnikenX</span>
+
+
+        <span class="chatlog__timestamp">03-Oct-19 09:11 PM</span>
+
+            <div class="chatlog__message " data-message-id="629410240726827011" id="message-629410240726827011">
+                <div class="chatlog__content">
+                    <span class="markdown">adicionem features que conseguirem encontrar, como folder sharing e se conseguirem vgpu ou gpu passthrough</span>
+
+                        <span class="chatlog__edited-timestamp" title="03-Oct-19 09:11 PM">(edited)</span>
+                </div>
+
+
+
+            </div>
+    </div>
+</div><div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/262014322689966104/9d265c0f4763df9e65dcd21aba1d4352.png" alt="Avatar" />
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Samega 7Cattac#5961" data-user-id="262014322689966104">Samega 7Cattac</span>
+
+
+        <span class="chatlog__timestamp">17-Oct-19 02:56 PM</span>
+
+            <div class="chatlog__message " data-message-id="634389234668666880" id="message-634389234668666880">
+                <div class="chatlog__content">
+                    <span class="markdown"><span class="mention" title="drakzhv#1241">@drakzhv</span> <a href="https://heiko-sieger.info/running-windows-10-on-linux-using-kvm-with-vga-passthrough/">https://heiko-sieger.info/running-windows-10-on-linux-using-kvm-with-vga-passthrough/</a></span>
+
+                </div>
+
+
+            <div class="chatlog__embed">
+                <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+                <div class="chatlog__embed-content-container">
+                    <div class="chatlog__embed-content">
+                        <div class="chatlog__embed-text">
+
+                            <div class="chatlog__embed-title">
+                                <a class="chatlog__embed-title-link" href="https://heiko-sieger.info/running-windows-10-on-linux-using-kvm-with-vga-passthrough/"><span class="markdown">Running Windows 10 on Linux using KVM with VGA Passthrough - Heiko...</span></a>
+                            </div>
+
+                            <div class="chatlog__embed-description"><span class="markdown">Table of Contents The NeedThe SolutionDisclaimerTutorialPart 1 – Hardware RequirementsIOMMU supportTwo graphics processorsUEFI support in the GPU used with WindowsPart 2 – Installing Qemu / KVMPart 3 – Determining the Devices to Pass Through to WindowsAbout keyboard and...</span></div>
+
+                        </div>
+
+                        <div class="chatlog__embed-thumbnail-container">
+                            <a class="chatlog__embed-thumbnail-link" href="https://heiko-sieger.info/wp-content/uploads/2017/07/GPU-Z_GTX970-1.gif">
+                                <img class="chatlog__embed-thumbnail" src="https://heiko-sieger.info/wp-content/uploads/2017/07/GPU-Z_GTX970-1.gif" alt="Thumbnail" />
+                            </a>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+            </div>
+    </div>
+</div><div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/344579102419845120/f0874780775b3e1c0d42a3495d0d5d84.png" alt="Avatar" />
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="OnikenX#0536" data-user-id="344579102419845120">OnikenX</span>
+
+
+        <span class="chatlog__timestamp">19-Oct-19 03:06 PM</span>
+
+            <div class="chatlog__message " data-message-id="635116571723038722" id="message-635116571723038722">
+                <div class="chatlog__content">
+                    <span class="markdown">Resumido: 
+&gt;instalar o virt-manager</span>
+
+                </div>
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="635116673984233472" id="message-635116673984233472">
+                <div class="chatlog__content">
+                    <span class="markdown">&gt;abrir e fazer o setup normal de vm</span>
+
+                </div>
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="635116783799500810" id="message-635116783799500810">
+                <div class="chatlog__content">
+                    <span class="markdown">&gt;cpu o mais parcido possivel com o do host</span>
+
+                </div>
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="635117101287211008" id="message-635117101287211008">
+                <div class="chatlog__content">
+                    <span class="markdown"><span class="mention" title="Alesh#6495">@Alesh</span> queres uma imagem do windows crackiada e que use menos recursos ou vais usar a gratuita?</span>
+
+                </div>
+
+
+
+            </div>
+    </div>
+</div><div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/119935937470922752/de1c4ee507831fe7a97ccae7d029620b.png" alt="Avatar" />
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Alesh#6495" data-user-id="119935937470922752">Alesh</span>
+
+
+        <span class="chatlog__timestamp">19-Oct-19 03:22 PM</span>
+
+            <div class="chatlog__message " data-message-id="635120569125437453" id="message-635120569125437453">
+                <div class="chatlog__content">
+                    <span class="markdown">ainda n&#227;o decidi</span>
+
+                </div>
+
+
+
+            </div>
+    </div>
+</div><div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/344579102419845120/f0874780775b3e1c0d42a3495d0d5d84.png" alt="Avatar" />
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="OnikenX#0536" data-user-id="344579102419845120">OnikenX</span>
+
+
+        <span class="chatlog__timestamp">19-Oct-19 03:26 PM</span>
+
+            <div class="chatlog__message " data-message-id="635121538328428555" id="message-635121538328428555">
+                <div class="chatlog__content">
+                    <span class="markdown">eu vou te dar opcoes, eu uso a versao LTSB crackiado, o sameg usa a versao pro com as licensas que ele ganhou</span>
+
+                </div>
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="635121623606886411" id="message-635121623606886411">
+                <div class="chatlog__content">
+                    <span class="markdown">e ele usa uns scripts para tirar o bloat</span>
+
+                </div>
+
+
+
+            </div>
+    </div>
+</div><div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/262014322689966104/9d265c0f4763df9e65dcd21aba1d4352.png" alt="Avatar" />
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Samega 7Cattac#5961" data-user-id="262014322689966104">Samega 7Cattac</span>
+
+
+        <span class="chatlog__timestamp">26-Oct-19 06:40 PM</span>
+
+            <div class="chatlog__message " data-message-id="637707249661509683" id="message-637707249661509683">
+                <div class="chatlog__content">
+                    <span class="markdown">Onde vais buscar o LTSB?</span>
+
+                </div>
+
+
+
+            </div>
+    </div>
+</div><div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/344579102419845120/f0874780775b3e1c0d42a3495d0d5d84.png" alt="Avatar" />
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="OnikenX#0536" data-user-id="344579102419845120">OnikenX</span>
+
+
+        <span class="chatlog__timestamp">26-Oct-19 07:09 PM</span>
+
+            <div class="chatlog__message " data-message-id="637714536463335424" id="message-637714536463335424">
+                <div class="chatlog__content">
+                    <span class="markdown">1337x.to</span>
+
+                </div>
+
+
+
+            </div>
+    </div>
+</div><div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/262014322689966104/9d265c0f4763df9e65dcd21aba1d4352.png" alt="Avatar" />
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Samega 7Cattac#5961" data-user-id="262014322689966104">Samega 7Cattac</span>
+
+
+        <span class="chatlog__timestamp">26-Oct-19 07:10 PM</span>
+
+            <div class="chatlog__message " data-message-id="637714587445231616" id="message-637714587445231616">
+                <div class="chatlog__content">
+                    <span class="markdown">e tu confias?</span>
+
+                </div>
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="637714744983420930" id="message-637714744983420930">
+                <div class="chatlog__content">
+                    <span class="markdown">pq eu n</span>
+
+                </div>
+
+
+
+            </div>
+    </div>
+</div><div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/344579102419845120/f0874780775b3e1c0d42a3495d0d5d84.png" alt="Avatar" />
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="OnikenX#0536" data-user-id="344579102419845120">OnikenX</span>
+
+
+        <span class="chatlog__timestamp">26-Oct-19 07:11 PM</span>
+
+            <div class="chatlog__message " data-message-id="637714821865013248" id="message-637714821865013248">
+                <div class="chatlog__content">
+                    <span class="markdown">ta bem mas &#233; algo temporario</span>
+
+                </div>
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="637714867700367407" id="message-637714867700367407">
+                <div class="chatlog__content">
+                    <span class="markdown">eu tambem nao confio na microsoft</span>
+
+                </div>
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="637714929503436800" id="message-637714929503436800">
+                <div class="chatlog__content">
+                    <span class="markdown">eu utilizo aquilo o minimo possivel</span>
+
+                        <span class="chatlog__edited-timestamp" title="26-Oct-19 07:11 PM">(edited)</span>
+                </div>
+
+
+
+            </div>
+    </div>
+</div><div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/262014322689966104/9d265c0f4763df9e65dcd21aba1d4352.png" alt="Avatar" />
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Samega 7Cattac#5961" data-user-id="262014322689966104">Samega 7Cattac</span>
+
+
+        <span class="chatlog__timestamp">26-Oct-19 07:12 PM</span>
+
+            <div class="chatlog__message " data-message-id="637715077184618497" id="message-637715077184618497">
+                <div class="chatlog__content">
+                    <span class="markdown">pois, mas se alguem quiser usar mais vale jogar pelo seguro</span>
+
+                </div>
+
+
+
+            </div>
+    </div>
+</div><div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/208668565996306434/e1745a2a240895252d87e79f456ea7a2.png" alt="Avatar" />
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="FXVNDER#2156" data-user-id="208668565996306434">FXVNDER</span>
+
+
+        <span class="chatlog__timestamp">19-Nov-19 09:39 PM</span>
+
+            <div class="chatlog__message " data-message-id="646464601591906304" id="message-646464601591906304">
+                <div class="chatlog__content">
+                    <span class="markdown">voc&#234;s s&#227;o coc&#243;s.
+tou a fazer um projeto meu de win10 com o m&#237;nimo bloat e mais r&#225;pido possivel</span>
+
+                </div>
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="646464636518006815" id="message-646464636518006815">
+                <div class="chatlog__content">
+                    <span class="markdown">acreditem ou n&#227;o, est&#225; a funcionar perfeitamente</span>
+
+                </div>
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="646464887895097345" id="message-646464887895097345">
+                <div class="chatlog__content">
+                    <span class="markdown">n&#227;o &#233; preciso mods nem nada.
+apenas instalem o win10 pro, apaguem o bloat, apaguem o que restar com o powershell, run a few scripts and O&amp;O Shut Up, e desligar anima&#231;&#245;es n stuff</span>
+
+                </div>
+
+
+
+            </div>
+    </div>
+</div><div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/172002275412279296/f5f65755f67ae1dc88d9bb271d0f5bef.png" alt="Avatar" />
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Tatsu#8792" data-user-id="172002275412279296">Tatsu</span>
+
+            <span class="chatlog__bot-tag">BOT</span>
+
+        <span class="chatlog__timestamp">19-Nov-19 09:40 PM</span>
+
+            <div class="chatlog__message " data-message-id="646464890478788628" id="message-646464890478788628">
+                <div class="chatlog__content">
+                    <span class="markdown"><img class="emoji " alt="🆙" title="🆙" src="https://twemoji.maxcdn.com/2/72x72/1f199.png" />  |  <strong>FXVNDER leveled up!</strong></span>
+
+                </div>
+
+                <div class="chatlog__attachment">
+                    <a href="https://cdn.discordapp.com/attachments/628541096582184960/646464889921077259/levelUp.png">
+                        
+                            <img class="chatlog__attachment-thumbnail" src="https://cdn.discordapp.com/attachments/628541096582184960/646464889921077259/levelUp.png" alt="Attachment" />
+                    </a>
+                </div>
+
+
+            </div>
+    </div>
+</div><div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/262014322689966104/9d265c0f4763df9e65dcd21aba1d4352.png" alt="Avatar" />
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Samega 7Cattac#5961" data-user-id="262014322689966104">Samega 7Cattac</span>
+
+
+        <span class="chatlog__timestamp">19-Nov-19 09:40 PM</span>
+
+            <div class="chatlog__message " data-message-id="646464911689383946" id="message-646464911689383946">
+                <div class="chatlog__content">
+                    <span class="markdown">say no to drugs</span>
+
+                </div>
+
+
+
+            </div>
+    </div>
+</div><div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/208668565996306434/e1745a2a240895252d87e79f456ea7a2.png" alt="Avatar" />
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="FXVNDER#2156" data-user-id="208668565996306434">FXVNDER</span>
+
+
+        <span class="chatlog__timestamp">19-Nov-19 09:41 PM</span>
+
+            <div class="chatlog__message " data-message-id="646464972167315496" id="message-646464972167315496">
+                <div class="chatlog__content">
+                    <span class="markdown">shut up conspiracy niggers</span>
+
+                </div>
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="646465096511389697" id="message-646465096511389697">
+                <div class="chatlog__content">
+                    <span class="markdown">&gt;mfw this people actually think microsoft gives a fuck to what shitty porn you masturbate to</span>
+
+                </div>
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="646465189968871456" id="message-646465189968871456">
+                <div class="chatlog__content">
+                    <span class="markdown"></span>
+
+                </div>
+
+                <div class="chatlog__attachment">
+                    <a href="https://cdn.discordapp.com/attachments/628541096582184960/646465189968871453/Z.png">
+                        
+                            <img class="chatlog__attachment-thumbnail" src="https://cdn.discordapp.com/attachments/628541096582184960/646465189968871453/Z.png" alt="Attachment" />
+                    </a>
+                </div>
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="646465230196703233" id="message-646465230196703233">
+                <div class="chatlog__content">
+                    <span class="markdown">tomem l&#225; um omegalul em jpg</span>
+
+                </div>
+
+
+
+            </div>
+    </div>
+</div><div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/262014322689966104/9d265c0f4763df9e65dcd21aba1d4352.png" alt="Avatar" />
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Samega 7Cattac#5961" data-user-id="262014322689966104">Samega 7Cattac</span>
+
+
+        <span class="chatlog__timestamp">19-Nov-19 09:42 PM</span>
+
+            <div class="chatlog__message " data-message-id="646465238799220764" id="message-646465238799220764">
+                <div class="chatlog__content">
+                    <span class="markdown">This niggers have some nice buttons to click under ur profile</span>
+
+                        <span class="chatlog__edited-timestamp" title="19-Nov-19 09:43 PM">(edited)</span>
+                </div>
+
+
+
+            </div>
+    </div>
+</div><div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/208668565996306434/e1745a2a240895252d87e79f456ea7a2.png" alt="Avatar" />
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="FXVNDER#2156" data-user-id="208668565996306434">FXVNDER</span>
+
+
+        <span class="chatlog__timestamp">19-Nov-19 09:42 PM</span>
+
+            <div class="chatlog__message " data-message-id="646465244314730518" id="message-646465244314730518">
+                <div class="chatlog__content">
+                    <span class="markdown">voc&#234;s n&#227;o merecem em png</span>
+
+                </div>
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="646465335171612680" id="message-646465335171612680">
+                <div class="chatlog__content">
+                    <span class="markdown">OwO&#180;</span>
+
+                </div>
+
+
+
+            </div>
+    </div>
+</div><div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/262014322689966104/9d265c0f4763df9e65dcd21aba1d4352.png" alt="Avatar" />
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Samega 7Cattac#5961" data-user-id="262014322689966104">Samega 7Cattac</span>
+
+
+        <span class="chatlog__timestamp">19-Nov-19 09:44 PM</span>
+
+            <div class="chatlog__message " data-message-id="646465766807568394" id="message-646465766807568394">
+                <div class="chatlog__content">
+                    <span class="markdown">and just an warning</span>
+
+                </div>
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="646465841281630229" id="message-646465841281630229">
+                <div class="chatlog__content">
+                    <span class="markdown">I&#39;m not in a good mood today</span>
+
+                </div>
+
+
+
+            </div>
+    </div>
+</div><div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/208668565996306434/e1745a2a240895252d87e79f456ea7a2.png" alt="Avatar" />
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="FXVNDER#2156" data-user-id="208668565996306434">FXVNDER</span>
+
+
+        <span class="chatlog__timestamp">19-Nov-19 09:44 PM</span>
+
+            <div class="chatlog__message " data-message-id="646465875402293258" id="message-646465875402293258">
+                <div class="chatlog__content">
+                    <span class="markdown">:c</span>
+
+                </div>
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="646465912278351902" id="message-646465912278351902">
+                <div class="chatlog__content">
+                    <span class="markdown">fam wtf</span>
+
+                </div>
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="646465995644338226" id="message-646465995644338226">
+                <div class="chatlog__content">
+                    <span class="markdown">&gt;levar &#224; letra o que eu digo</span>
+
+                </div>
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="646466041475498005" id="message-646466041475498005">
+                <div class="chatlog__content">
+                    <span class="markdown">isso foi uma beca bruh moment</span>
+
+                </div>
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="646466045879648322" id="message-646466045879648322">
+                <div class="chatlog__content">
+                    <span class="markdown">mas k</span>
+
+                </div>
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="646466090930667547" id="message-646466090930667547">
+                <div class="chatlog__content">
+                    <span class="markdown">um dred mm calou-se</span>
+
+                </div>
+
+
+
+            </div>
+    </div>
+</div><div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/344579102419845120/f0874780775b3e1c0d42a3495d0d5d84.png" alt="Avatar" />
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="OnikenX#0536" data-user-id="344579102419845120">OnikenX</span>
+
+
+        <span class="chatlog__timestamp">20-Nov-19 01:50 AM</span>
+
+            <div class="chatlog__message " data-message-id="646527702698033152" id="message-646527702698033152">
+                <div class="chatlog__content">
+                    <span class="markdown">para mim nao &#233; a cena de a microsoft a espiar ou nao, eu simplesmente nao  gosto de fazer dualboot e prefiro o windows a correr numa vm com gpu passthrough do que correr lhe nativamente tambem para nao me estragar nada de boot e nunca ficar a espera de ele acabar um update sempre que eu quero mudar de os mas mais tarde eu quero saber mais sobre essas merdas mas desconfio que presiso ja que o windows enterprise tem quase nenhum bloat</span>
+
+                </div>
+
+
+
+                <div class="chatlog__reactions">
+                        <div class="chatlog__reaction">
+                            <img class="emoji emoji--small" alt="👍" title="👍" src="https://twemoji.maxcdn.com/2/72x72/1f44d.png" />
+                            <span class="chatlog__reaction-count">1</span>
+                        </div>
+                </div>
+            </div>
+    </div>
+</div><div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/262014322689966104/9d265c0f4763df9e65dcd21aba1d4352.png" alt="Avatar" />
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Samega 7Cattac#5961" data-user-id="262014322689966104">Samega 7Cattac</span>
+
+
+        <span class="chatlog__timestamp">12-Feb-20 05:11 PM</span>
+
+            <div class="chatlog__message " data-message-id="677200094734581811" id="message-677200094734581811">
+                <div class="chatlog__content">
+                    <span class="markdown"><span class="mention" title="OnikenX#0536">@OnikenX</span> n queres fazer um gist com isto?</span>
+
+                </div>
+
+
+
+            </div>
+    </div>
+</div><div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/344579102419845120/f0874780775b3e1c0d42a3495d0d5d84.png" alt="Avatar" />
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="OnikenX#0536" data-user-id="344579102419845120">OnikenX</span>
+
+
+        <span class="chatlog__timestamp">12-Feb-20 05:24 PM</span>
+
+            <div class="chatlog__message " data-message-id="677203512127389738" id="message-677203512127389738">
+                <div class="chatlog__content">
+                    <span class="markdown">What is a gist?</span>
+
+                </div>
+
+
+
+            </div>
+    </div>
+</div><div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/262014322689966104/9d265c0f4763df9e65dcd21aba1d4352.png" alt="Avatar" />
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Samega 7Cattac#5961" data-user-id="262014322689966104">Samega 7Cattac</span>
+
+
+        <span class="chatlog__timestamp">12-Feb-20 05:36 PM</span>
+
+            <div class="chatlog__message " data-message-id="677206413667336204" id="message-677206413667336204">
+                <div class="chatlog__content">
+                    <span class="markdown">github gist</span>
+
+                </div>
+
+
+
+            </div>
+    </div>
+</div><div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/344579102419845120/f0874780775b3e1c0d42a3495d0d5d84.png" alt="Avatar" />
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="OnikenX#0536" data-user-id="344579102419845120">OnikenX</span>
+
+
+        <span class="chatlog__timestamp">12-Feb-20 06:00 PM</span>
+
+            <div class="chatlog__message " data-message-id="677212567306764288" id="message-677212567306764288">
+                <div class="chatlog__content">
+                    <span class="markdown">ok ainda n percebi o que raio &#233; um gist, principalmente depois de ter lido o que sopostamente &#233; no github por isso vou dizer nao</span>
+
+                </div>
+
+
+
+            </div>
+    </div>
+</div><div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/262014322689966104/9d265c0f4763df9e65dcd21aba1d4352.png" alt="Avatar" />
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="Samega 7Cattac#5961" data-user-id="262014322689966104">Samega 7Cattac</span>
+
+
+        <span class="chatlog__timestamp">12-Feb-20 07:08 PM</span>
+
+            <div class="chatlog__message " data-message-id="677229637499355147" id="message-677229637499355147">
+                <div class="chatlog__content">
+                    <span class="markdown">&#233; tipo um docmento no github</span>
+
+                </div>
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="677229679664693249" id="message-677229679664693249">
+                <div class="chatlog__content">
+                    <span class="markdown">podes usar como tutorial</span>
+
+                </div>
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="677229718508011551" id="message-677229718508011551">
+                <div class="chatlog__content">
+                    <span class="markdown">era so para tirar isto daki</span>
+
+                </div>
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="677229745997348924" id="message-677229745997348924">
+                <div class="chatlog__content">
+                    <span class="markdown">este chat n &#233; mais usado</span>
+
+                </div>
+
+
+
+            </div>
+    </div>
+</div><div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/344579102419845120/f0874780775b3e1c0d42a3495d0d5d84.png" alt="Avatar" />
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="OnikenX#0536" data-user-id="344579102419845120">OnikenX</span>
+
+
+        <span class="chatlog__timestamp">12-Feb-20 11:22 PM</span>
+
+            <div class="chatlog__message " data-message-id="677293423572549646" id="message-677293423572549646">
+                <div class="chatlog__content">
+                    <span class="markdown">Ha ok</span>
+
+                </div>
+
+
+
+            </div>
+            <div class="chatlog__message " data-message-id="677293587930808352" id="message-677293587930808352">
+                <div class="chatlog__content">
+                    <span class="markdown">Depois, quando eu for fazer a vm, depois dos exames</span>
+
+                </div>
+
+
+
+            </div>
+    </div>
+</div>
+</div>
+
+<div class="postamble">
+    <div class="postamble__entry">Exported 72 message(s)</div>
+</div>
+
+</body>
+</html>
