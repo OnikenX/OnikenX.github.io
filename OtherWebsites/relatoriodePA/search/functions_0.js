@@ -1,9 +1,0 @@
-var searchData=
-[
-  ['addevent_313',['addEvent',['../classPlanet__Bound_1_1logica_1_1dados_1_1ship_1_1ShipDados.html#a5dbcc65ca9ee9b7cbe8b0a8ba4412515',1,'Planet_Bound.logica.dados.ship.ShipDados.addEvent()'],['../classPlanet__Bound_1_1logica_1_1Ship.html#acac4cbada30fb8fb6f9975b915d96079',1,'Planet_Bound.logica.Ship.addEvent()']]],
-  ['addofficer_314',['addOfficer',['../classPlanet__Bound_1_1logica_1_1dados_1_1ship_1_1ShipDados.html#a19dce3d68f21708c577054be585c5833',1,'Planet_Bound::logica::dados::ship::ShipDados']]],
-  ['addxresourcesoftypey_315',['addXResourcesOfTypeY',['../classPlanet__Bound_1_1logica_1_1dados_1_1ship_1_1ShipDados.html#af07a561afd852fa8e634da3a1982a711',1,'Planet_Bound::logica::dados::ship::ShipDados']]],
-  ['alien_316',['Alien',['../classPlanet__Bound_1_1logica_1_1dados_1_1resourcesandplanets_1_1Terreno_1_1Alien.html#afc8ba3d0ac4590d6483df3f2885405e4',1,'Planet_Bound::logica::dados::resourcesandplanets::Terreno::Alien']]],
-  ['aplicaevento_317',['aplicaEvento',['../classPlanet__Bound_1_1logica_1_1estados_1_1EstadoAdapter.html#a89c28ecaf10c4044b64d95fb8bf0f02b',1,'Planet_Bound.logica.estados.EstadoAdapter.aplicaEvento()'],['../interfacePlanet__Bound_1_1logica_1_1estados_1_1IEstado.html#a5a1723e84127a8f0ffcf6dec02e2e080',1,'Planet_Bound.logica.estados.IEstado.aplicaEvento()'],['../classPlanet__Bound_1_1logica_1_1estados_1_1noespaco_1_1NoEspaco.html#a3bdfd58a516d046dedf98144201cff56',1,'Planet_Bound.logica.estados.noespaco.NoEspaco.aplicaEvento()'],['../classPlanet__Bound_1_1logica_1_1Ship.html#a43c84b822846c96a6a179e76ce2914ea',1,'Planet_Bound.logica.Ship.aplicaEvento()']]],
-  ['attack_318',['ATTACK',['../classPlanet__Bound_1_1logica_1_1dados_1_1resourcesandplanets_1_1Terreno.html#aa5213bccdb75391b2b2b9900c2376ad9',1,'Planet_Bound::logica::dados::resourcesandplanets::Terreno']]]
-];
