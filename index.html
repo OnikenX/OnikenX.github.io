@@ -30,16 +30,14 @@ https://github.com/helfi92/studorlio
 	<title>OnikenX</title>
 	<meta charset="UTF-8">
 	<meta name="author" content="OnikenX">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="I'm a simple c/c++ and rust programer with little knowhow to do things.">
-	<meta name="image" content="./assets/img/OnikenX_Logo_v2.svg">
-
-	<link href="./assets/img/OnikenX_Logo_v2.svg" rel="icon">
-	<meta name="msapplication-TileImage" content="./assets/img/OnikenX_Logo_v2.svg">
+	<meta name="image" content="./assets/img/OnikenX_Logo_v3.svg">
+	<link href="./assets/img/OnikenX_Logo_v3.svg" rel="icon">
+	<meta name="msapplication-TileImage" content="./assets/img/OnikenX_Logo_v3.svg">
 
 	<!-- css files -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.3.1/css/bulma.min.css">
 	<link rel="stylesheet" type="text/css" href="assets/css/styles.css">
 
@@ -54,7 +52,7 @@ https://github.com/helfi92/studorlio
 	<nav class="nav container void-background horizontal-align">
 		<!-- This "nav-menu" is hidden on mobile -->
 		<!-- Add the modifier "is-active" to display it on mobile -->
-		<div class="nav-left">
+		<div class="nav-left container void-background">
 
 			<a href="http://github.com/OnikenX" class="nav-item">
 				<span class="icon">
@@ -87,11 +85,9 @@ https://github.com/helfi92/studorlio
 		</div>
 
 		<div class="nav-right nav-menu">
-			<!-- unused
 			<a class="nav-item" href="#about">About</a>
 			<a class="nav-item" href="#projects">Projects</a>
-			<a class="nav-item" href="#social">Social</a>
-			-->
+			<!-- <a class="nav-item" href="#social">Social</a> -->
 		</div>
 
 		<!-- This "nav-toggle" hamburger menu is only visible on mobile -->
@@ -115,7 +111,8 @@ https://github.com/helfi92/studorlio
 		</div>
 		<div class="container has-text-centered">
 			<!-- Source: https://flic.kr/p/pAZBNK -->
-			<img style="height: 20em" src="./assets/img/OnikenX_Logo_v2.svg"><!--class="avatar"-->
+			<img style="height: 20em" src="./assets/img/OnikenX_Logo_v3.svg">
+			<!--class="avatar"-->
 		</div>
 		<div class="a container"></br>
 			<p class="intro">
@@ -125,45 +122,89 @@ https://github.com/helfi92/studorlio
 				</center>
 			</p>
 		</div>
-		
-	
-	<!-- Projects-->
+	</section>
+
+
+
+	<!-- Projects -->
 	<section id="projects" class="section section-2">
-		<div class="container">	
+		<div class="container">
 			<div class="has-text-centered">
-				<h3 class="title is-3 text-center">Projects</h3>
+				<h3 class="title is-3">Projects</h3>
 			</div>
-			<div>
-				
-			</div>
+
 			<div class="columns is-multiline is-desktop">
-				<div class="column">
+				<!-- Project 1 -->
+				<div class="columns">
 					<div class="box project-text">
-						<article>
-							<div>
-								<p>	
-									rem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageM
-								</p>
+						<div class="has-text-centered">
+							<h4 name="rust" id="rust" class="title is-4">Rust</h4>
+						</div>
+						<div class="columns is-multiline is-desktop">
+							<div class="column">
+
+
+								<div class="box project-text">
+									<article>
+										<div class="has-text-centered">
+											<h5 class="title is-5">Tweets repeater</h5>
+										</div>
+										<div>
+											<p>
+											<p><a href="https://github.com/OnikenX/Tweets-Repeater">This</a> is a rust
+												server-client application that collects tweets with a certain hashtag,
+												it can be easily changed in the <em>token</em> file, now it is
+												configured with <em>#Ukraine</em>, and repeats them to the clients.
+											</p>
+
+											<li>The server uses the tokio lib to asynchronous collect and distribute
+												tweets.</li>
+											<li>The client is a shared library with a C ABI, with one call it connects
+												to the server and collects the specified number of tweets.</li>
+											</p>
+										</div>
+									</article>
+								</div>
 							</div>
-						</article>
+
+							<div class="box project-text column">
+								<article>
+									<div class="has-text-centered">
+										<h5 class="title is-5">Lok2</h5>
+									</div>
+									<div>
+										<p>
+											A binary manipulation rust program that transforms UTF-8 text to binary and
+											transforms the 0s and 1s to oks and lols and can reverse the process.
+										</p>
+										</br>
+										<h6 class="subtitle">Links</h6>
+										The <a href="https://github.com/onikenx/lok2/">main library code</a>, <a
+											href="https://onikenx.github.io/lok2-web/">a web interface</a> and
+										it's <a href="https://github.com/onikenx/lok2-web/">repo</a>.
+									</div>
+								</article>
+							</div>
+
+						</div>
 					</div>
 				</div>
+				<!-- Project 2
 				<div class="column">
 					<div class="box project-text">
 						<article>
-
 							<div>
 								<p>
-									rem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageM
+									Bless up. Another one. How’s business? Boomin. Don’t ever play yourself. Life is
+									what you make it, so let’s make it.
 								</p>
 							</div>
 						</article>
-					</div>
-				</div>
+					</div>-->
 			</div>
 		</div>
+		</div>
 	</section>
-	
 	<!-- Footer
 	<section class="section-4 has-text-centered container">
 		OnikenX
