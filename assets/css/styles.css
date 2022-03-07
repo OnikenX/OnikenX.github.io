@@ -91,7 +91,7 @@ a.nav-item:hover {
 
 @media screen and (max-width: 768px) {
 	.nav-menu {
-		background-color: #551818;
+		background-color: #2b2a2a;
 	}
 
 	.nav-toggle:hover {
